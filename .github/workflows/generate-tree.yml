@@ -12,18 +12,20 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Generate directory tree
+      - name: Generate directory tree using config
         uses: jaywcjlove/github-action-folder-tree@main
         id: tree
         with:
-          path: .
-          exclude: ".git|node_modules"
-          depth: 2
+          config: .foldertree.config.js
 
-      - name: Commit TREE.md
+      - name: Commit TREE.md if changed
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add TREE.md
-          git commit -m "chore: auto-generate TREE.md" || echo "No changes to commit"
-          git push
+          if [ -f TREE.md ]; then
+            git add TREE.md
+            git diff --cached --quiet && echo "No changes" || git commit -m "chore: auto-generate TREE.md"
+            git push
+          else
+            echo "TREE.md not found – skipping commit."
+          fi

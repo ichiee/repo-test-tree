@@ -1,0 +1,6 @@
+module.exports = {
+  path: './',
+  depth: 2,
+  exclude: /node_modules|\.git/,
+  output: 'TREE.md'
+};
