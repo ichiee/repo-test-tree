@@ -16,7 +16,7 @@ jobs:
         uses: jaywcjlove/github-action-folder-tree@main
         id: tree
         with:
-          config: .foldertree.config.js
+          config: .foldertree.config.json
 
       - name: Commit TREE.md if changed
         run: |
