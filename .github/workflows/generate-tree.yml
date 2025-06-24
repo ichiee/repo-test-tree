@@ -1,0 +1,30 @@
+name: Generate Directory Tree
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Generate directory tree
+        uses: jaywcjlove/github-action-folder-tree@main
+        id: tree
+        with:
+          path: .
+          ignore: "node_modules|.git"
+          output: TREE.md
+          max-depth: 2
+
+      - name: Commit changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add TREE.md
+          git commit -m "chore: auto-generate directory tree" || echo "No changes"
+          git push
